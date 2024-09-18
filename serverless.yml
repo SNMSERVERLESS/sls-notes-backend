@@ -7,11 +7,21 @@ service: sls-notes-backend
 
 plugins:
   - serverless-offline
+  # - serverless-domain-manager
 
 custom:
+  allowedHeaders:
+    - Accept
+    - Content-Type
+    - Content-Length
+    - Authorization
+    - X-Amz-Date
+    - X-Api-Key
   serverless-offline:
     port: 3000
     host: 0.0.0.0
+  # custom-domain:
+  #   domainname: test.inxocean.com
 
 stages:
   default:
@@ -95,7 +105,6 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        BillingMode: PAY_PER_REQUEST
         TableName: ${param:tableName}
         GlobalSecondaryIndexes:
         - IndexName: note_id_index
