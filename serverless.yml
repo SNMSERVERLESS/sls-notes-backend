@@ -37,7 +37,7 @@ provider:
   region: ap-south-1
   stage: prod
   timeout: 5
-  memorySize: 128
+  memorySize: 256
   endpointType: regional
   environment:
     TABLE_NAME: ${param:tableName}
