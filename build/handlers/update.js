@@ -22,7 +22,7 @@ module.exports.update = (event) => __awaiter(void 0, void 0, void 0, function* (
         const params = {
             TableName: tableName, // Replace with your DynamoDB table name
             Key: {
-                user_id: user_id
+                user_id: { S: user_id }
             },
             UpdateExpression: "set #first_name = :first_name, #last_name = :last_name, #email = :email, #website = :website, #description = :description", // Set the attribute to a new value
             ExpressionAttributeNames: {

@@ -10,7 +10,7 @@ module.exports.delete = async (event: any) => {
     const params = {
       TableName: tableName,  // Replace with your DynamoDB table name
       Key: {
-        user_id: user_id
+        user_id: { S: user_id }
       }
     };
     const command = new DeleteItemCommand(params);
