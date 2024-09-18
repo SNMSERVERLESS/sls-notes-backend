@@ -5,6 +5,14 @@ app: sls-notes-backend
 # "service" is the name of this project. This will also be added to your AWS resource names.
 service: sls-notes-backend
 
+plugins:
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    port: 3000
+    host: 0.0.0.0
+
 stages:
   default:
     params:
@@ -16,7 +24,10 @@ provider:
   region: ap-south-1
   stage: prod
   timeout: 5
+  memorySize: 128
   endpointType: regional
+  environment:
+    TABLE_NAME: ${param:tableName}
 
   iam:
     role:
@@ -30,15 +41,39 @@ provider:
             - dynamodb:UpdateItem
             - dynamodb:DeleteItem
           Resource:
-            - Fn::GetAtt: [UsersTable, Arn]
-  environment:
-    NOTES_TABLE: ${param:tableName}
+            - Fn::GetAtt: [NotesTable, Arn]
 
 functions:
-  api:
-    handler: handler.handler
+  addNote:
+    handler: build/handlers/add.add
     events:
-      - httpApi: "*"
+      - http:
+          path: /users/{user_id}
+          method: post
+  updateNote:
+    handler: build/handlers/update.update
+    events:
+      - http:
+          path: /users/{user_id}
+          method: patch
+  getNote:
+    handler: build/handlers/note.note
+    events:
+      - http:
+          path: /users/{user_id}
+          method: get
+  getNotes:
+    handler: build/handlers/notes.notes
+    events:
+      - http:
+          path: /users
+          method: get
+  deleteNote:
+    handler: build/handlers/delete.delete
+    events:
+      - http:
+          path: /users/{user_id}
+          method: delete
 
 resources:
   Resources:
@@ -63,8 +98,10 @@ resources:
         BillingMode: PAY_PER_REQUEST
         TableName: ${param:tableName}
         GlobalSecondaryIndexes:
-          - IndexName: note_id_index
-            KeyType: HASH
+        - IndexName: note_id_index
+          KeySchema:
+            - AttributeName: note_id
+              KeyType: HASH
           Projection:
             ProjectionType: ALL
           ProvisionedThroughput:
