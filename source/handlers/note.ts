@@ -12,7 +12,7 @@ module.exports.note = async (event: any) => {
     const params = {
       TableName: tableName,  // Replace with your DynamoDB table name
       Key: {
-        primaryKey: { S: user_id },  // Replace with your primary key and data type
+        user_id: { S: user_id },  // Replace with your primary key and data type
       },
     };
     const command = new GetItemCommand(params);
