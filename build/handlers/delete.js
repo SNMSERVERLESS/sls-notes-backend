@@ -21,7 +21,7 @@ module.exports.delete = (event) => __awaiter(void 0, void 0, void 0, function* (
         const params = {
             TableName: tableName, // Replace with your DynamoDB table name
             Key: {
-                primaryKey: { S: user_id } // Replace with your primary key
+                user_id: user_id
             }
         };
         const command = new client_dynamodb_1.DeleteItemCommand(params);

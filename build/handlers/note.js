@@ -21,7 +21,7 @@ module.exports.note = (event) => __awaiter(void 0, void 0, void 0, function* () 
         const params = {
             TableName: tableName, // Replace with your DynamoDB table name
             Key: {
-                primaryKey: { S: user_id }, // Replace with your primary key and data type
+                user_id: user_id
             },
         };
         const command = new client_dynamodb_1.GetItemCommand(params);
