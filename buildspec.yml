@@ -1,0 +1,29 @@
+version: 0.2
+
+env:
+  variables:
+    SERVERLESS_ACCESS_KEY: $SERVERLESS_ACCESS_KEY
+
+phases:
+  install:
+    commands:
+      - echo Installing Serverless.....
+      - npm install -g serverless
+      # - serverless config credentials --provider serverless --key $SERVERLESS_ACCESS_KEY
+      # - serverless config credentials --provider aws --key <AWS_ACCESS_KEY_ID> --secret <AWS_SECRET_ACCESS_KEY>
+      # - export SERVERLESS_ACCESS_KEY=$SERVERLESS_ACCESS_KEY
+
+  pre_build:
+    commands:
+      - echo Installing source NPM depedencies...
+      - npm install
+
+  build:
+    commands:
+      - echo Deployment started on `date`
+      - echo Deploying with Serverless Framework
+      - sls deploy -v -s $STAGE_NAME
+
+  post_build:
+    commands:
+      - echo Deployment completed on `date`
